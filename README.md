@@ -1,10 +1,10 @@
-# archivedir
+# Archive Dirs
 
 A bash script that archives individual directories separately from source path to a target path
 
 # Usage
 
-archivedirs -s path -t path [DIRECTORY]..."
+archivedirs -s path -t path [DIRECTORIES]..."
 archivedirs -s ~/Documents -t /mnt/USB/snapshots awesomeProject bills
 
 # Sample Archive Script
