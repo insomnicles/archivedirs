@@ -1,13 +1,9 @@
 #!/bin/bash
 
-declare -a dirs=(
-			 "project1"
-			 "bills"
-			 "workproject"
-			 "vacation"
-			)
+declare -a dirs=("project"
+		 "bills")
 
-source_dir=/home/user1/Documents
-target_dir=/media/user1/USB/snapshots
+source_dir=test
+target_dir=test/snapshots
 
-archdirs.sh -s "${source_dir}" -t "${target_dir}" "${dirs[@]}"
+./archdirs.sh -s "${source_dir}" -t "${target_dir}" "${dirs[@]}"

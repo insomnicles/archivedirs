@@ -64,6 +64,4 @@ do
    fi
 done
 
-printf "Done.\n"
-
 exit 0
