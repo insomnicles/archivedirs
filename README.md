@@ -1,7 +1,7 @@
 # Archivedirs
 
 Bash script that archives chosen directories individually from a parent directory and stores them to a target directory
-Useful for backing up snapshots of ongoing projects.
+Useful for backing up snapshots of ongoing projects. Developer directories "node_modules", "vendor", ".git" are ignored
 
 ## Usage
 
