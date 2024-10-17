@@ -1,32 +1,32 @@
 #!/bin/bash
 
-errorMessage()
+error_message()
 {
-  me=$(basename "$0")
+  filename=$(basename "$0")
   cat <<EOF
-    Usage: ${me} -s [PATH1] -t [PATH2] [DIRS]
+
+    Usage: ${filename} -s [PATH1] -t [PATH2] [DIRS] ...
         -s        the (source) path of parent directory where all directories (DIRS) to be archived are
         -d        the (target) path where directory archives are placed 
-        [DIRS]... Directories (0 or more) from source directories root you want to back up (tar.gz) to target directories root"
+        [DIRS]    Directories (0 or more) from source directories root you want to back up (tar.gz) to target directories root
 
 EOF
   exit 1
 }
    
-validateDirs()  {
-  # if source root directory does not exist, exit
+validate()  {
+  [ -z ${source_dir} ] && error_message "Source directory parameter (-s path) is required"
+  [ -z ${target_dir} ] && error_message "Target directory parameter (-t path) is required"
+  [[ $# -eq 0 ]] && error_message "No directories specified: there is nothing to do"
+
   if [ ! -d "${source_dir}" ]; then
-      printf "\n\n Error: source directory could not be found.\n"
-      exit 1
+    error_message "Error: source directory could not be found."
   fi
 
-  # if target directory does not exist, exit
   if [ ! -d "${target_dir}" ]; then
-      printf "\n\n Error: target directory could not be found.\n"
-      exit 1
+    error_message "Error: target directory could not be found."
   fi
 }
-
 
 # Process command-line options
 while getopts "s:t:" opt
@@ -34,26 +34,29 @@ do
    case "$opt" in
       s) source_dir="$OPTARG" ;;
       t) target_dir="$OPTARG" ;;
-      ?) errorMessage ;;
+      ?) error_message ;;
    esac
 done
 shift $(( OPTIND - 1 ))
 
-validateDirs
 
-# archive individual directories
-# for directory in "${directories[@]}"
+validate $*
+
+# Archive individual directories
 for directory in "$@";
 do
   if [ ! -d "${source_dir}/${directory}" ]; then
-    printf "\nSkipping archive of ${directory}: source directory could not be found in source root directory\n"
+    printf "\nSkipping archive of ${directory}: directory not found.\n" >&2
     continue
   fi
 
-
   printf "\nArchiving ${directory} Directory. "
-  echo "${source_dir} - ${target_dir} - ${directory}"
-  tar czf "${target_dir}/`date +"%Y%m%d-%H%M"`.${directory}".tar.gz --absolute-names --exclude="${source_dir}/${directory}/node_modules" --exclude="${source_dir}/${directory}/vendor" --exclude="${source_dir}/${directory}/.git" "${source_dir}/${directory}"
+  tar czf "${target_dir}/`date +"%Y%m%d-%H%M"`.${directory}".tar.gz \
+--absolute-names \
+--exclude="${source_dir}/${directory}/node_modules" \
+--exclude="${source_dir}/${directory}/vendor" \
+--exclude="${source_dir}/${directory}/.git" \
+"${source_dir}/${directory}"
   printf "Done.\n"
 done
 
