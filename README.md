@@ -16,13 +16,18 @@ Example:
 
 Result: /mnt/USB/snapshots
     20201201-0930.dir1.tar.gz
-    20201201-0930.project1.tar.gz
-    20201201-0930.bills.tar.gz
-    20201201-0935.project1.tar.gz
-    20201201-0940.dir1.tar.gz
-    20201201-0940.project1.tar.gz
-    20201201-0940.bills.tar.gz
 
+    20201201-0930.project1.tar.gz
+
+    20201201-0930.bills.tar.gz
+
+    20201201-0935.project1.tar.gz
+
+    20201201-0940.dir1.tar.gz
+
+    20201201-0940.project1.tar.gz
+
+    20201201-0940.bills.tar.gz
 
 ## Example Archive Script
 
