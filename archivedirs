@@ -43,15 +43,16 @@ shift $(( OPTIND - 1 ))
 validate $*
 
 # Archive individual directories
+timestamp=$(date +"%Y%m%d-%H%M")
 for directory in "$@";
 do
   if [ ! -d "${source_dir}/${directory}" ]; then
     printf "\nSkipping archive of ${directory}: directory not found.\n" >&2
     continue
   fi
-
+  filename="${target_dir}/${timestamp}-${directory}.tar.gz"
   printf "\nArchiving ${directory} Directory. "
-  tar czf "${target_dir}/`date +"%Y%m%d-%H%M"`.${directory}".tar.gz \
+  tar czf "${filename}" \
 --absolute-names \
 --exclude="${source_dir}/${directory}/node_modules" \
 --exclude="${source_dir}/${directory}/vendor" \
