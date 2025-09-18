@@ -1,20 +1,19 @@
 #!/bin/bash
 
-error_message()
-{
+error_message() {
   filename=$(basename "$0")
   cat <<EOF
 
     Usage: ${filename} -s [PATH1] -t [PATH2] [DIRS] ...
         -s        the (source) path of parent directory where all directories (DIRS) to be archived are
-        -d        the (target) path where directory archives are placed 
+        -t        the (target) path where directory archives are placed 
         [DIRS]    Directories (0 or more) from source directories root you want to back up (tar.gz) to target directories root
 
 EOF
   exit 1
 }
-   
-validate()  {
+
+validate() {
   [ -z ${source_dir} ] && error_message "Source directory parameter (-s path) is required"
   [ -z ${target_dir} ] && error_message "Target directory parameter (-t path) is required"
   [[ $# -eq 0 ]] && error_message "No directories specified: there is nothing to do"
@@ -29,23 +28,20 @@ validate()  {
 }
 
 # Process command-line options
-while getopts "s:t:" opt
-do
-   case "$opt" in
-      s) source_dir="$OPTARG" ;;
-      t) target_dir="$OPTARG" ;;
-      ?) error_message ;;
-   esac
+while getopts "s:t:" opt; do
+  case "$opt" in
+  s) source_dir="$OPTARG" ;;
+  t) target_dir="$OPTARG" ;;
+  ?) error_message ;;
+  esac
 done
-shift $(( OPTIND - 1 ))
-
+shift $((OPTIND - 1))
 
 validate $*
 
 # Archive individual directories
 timestamp=$(date +"%Y%m%d-%H%M")
-for directory in "$@";
-do
+for directory in "$@"; do
   if [ ! -d "${source_dir}/${directory}" ]; then
     printf "\nSkipping archive of ${directory}: directory not found.\n" >&2
     continue
@@ -53,11 +49,10 @@ do
   filename="${target_dir}/${timestamp}-${directory}.tar.gz"
   printf "\nArchiving ${directory} Directory. "
   tar czf "${filename}" \
---absolute-names \
---exclude="${source_dir}/${directory}/node_modules" \
---exclude="${source_dir}/${directory}/vendor" \
---exclude="${source_dir}/${directory}/.git" \
-"${source_dir}/${directory}"
+    --absolute-names \
+    --exclude="${source_dir}/${directory}/node_modules" \
+    --exclude="${source_dir}/${directory}/vendor" \
+    --exclude="${source_dir}/${directory}/.git" \
+    "${source_dir}/${directory}"
   printf "Done.\n"
 done
-
